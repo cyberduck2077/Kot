@@ -1,17 +1,18 @@
 package com.example.kot.view_model
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kot.model.SimpleDataModel
-import com.example.kot.repository.retrofit.RetrofitHelper
-import com.example.kot.repository.retrofit.SimpleDataApiInterface
+import com.example.kot.model.user.UserDataModel
+import com.example.kot.repository.UserRepository
 import kotlinx.coroutines.*
 
-class SimpleViewModel(var num: Int = 0) : ViewModel() {
+class SimpleViewModel constructor(private val userRepository: UserRepository) : ViewModel() {
 
     val dataModelLiveData = MutableLiveData<SimpleDataModel>()
+    val userModelLiveData = MutableLiveData<UserDataModel>()
+//    val idParamLiveData = MutableLiveData<Int>()
     val numLiveData = MutableLiveData<Int>()
     val isSuccessLoadingLiveData  = MutableLiveData<Boolean>()
     var job: Job? = null
@@ -20,15 +21,15 @@ class SimpleViewModel(var num: Int = 0) : ViewModel() {
         Log.d("ERROR COROUTINE!", throwable.localizedMessage as String)
     }
 
-    fun getAllData() {
-
-        val dataApi = RetrofitHelper.getInstance().create(SimpleDataApiInterface::class.java)
+    fun getUser(id:Int) {
 
         job = CoroutineScope(Dispatchers.IO).launch {
-            val response = dataApi.getSimpleData()
+
+            val response = userRepository.getUserById(id)
+
             withContext(Dispatchers.Main + exceptionHandler) {
                 if (response.isSuccessful) {
-                    dataModelLiveData.postValue(response.body())
+                    userModelLiveData.value = response.body()
                     isSuccessLoadingLiveData.value = true
 //                    Log.d("CODE", response.code().toString())
 //                    Log.d("BODY().TITLE", response.body()?.title.toString())
@@ -42,7 +43,7 @@ class SimpleViewModel(var num: Int = 0) : ViewModel() {
     }
 
     fun showNum() {
-        val _num = if (numLiveData.value != null) numLiveData.value else num
+        val _num = if (numLiveData.value != null) numLiveData.value else 0
 
         Log.d("DDD", numLiveData.value.toString())
     }
