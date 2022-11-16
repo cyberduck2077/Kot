@@ -17,4 +17,17 @@
         android:contentDescription="downloadDataBottom"
         />
 
+    <EditText
+        android:id="@+id/editText"
+        android:hint="write a number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="number"
+        android:layout_marginTop="40sp"
+        android:layout_marginHorizontal="10sp"/>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
