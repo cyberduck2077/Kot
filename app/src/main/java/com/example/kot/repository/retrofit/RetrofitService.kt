@@ -10,18 +10,18 @@ import retrofit2.http.Path
 
 interface RetrofitService {
 
-    @GET("todos/1")
-    suspend fun getSimpleData():Response<SimpleDataModel>
+    @GET("todos/{num}")
+    suspend fun getSimpleData(@Path("num") num: Int): Response<SimpleDataModel>
 
     @GET("users/{id}")
-    suspend fun getUserById(@Path("id") id: Int):Response<UserDataModel>
+    suspend fun getUserById(@Path("id") id: Int): Response<UserDataModel>
 
-    companion object{
+    companion object {
         val baseUrl = "https://jsonplaceholder.typicode.com/"
         var retrofitService: RetrofitService? = null
 
-        fun getInstance():RetrofitService{
-            if(retrofitService == null) {
+        fun getInstance(): RetrofitService {
+            if (retrofitService == null) {
                 val retrofit = Retrofit.Builder().baseUrl(baseUrl)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()

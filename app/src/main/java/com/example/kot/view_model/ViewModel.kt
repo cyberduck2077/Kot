@@ -5,23 +5,29 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.kot.model.SimpleDataModel
 import com.example.kot.model.user.UserDataModel
+import com.example.kot.repository.SimpleDataRepository
 import com.example.kot.repository.UserRepository
 import kotlinx.coroutines.*
 
-class SimpleViewModel constructor(private val userRepository: UserRepository) : ViewModel() {
+class SimpleViewModel constructor(
+    private val userRepository: UserRepository,
+    private val simpleDataRepository: SimpleDataRepository,
+) : ViewModel() {
 
     val dataModelLiveData = MutableLiveData<SimpleDataModel>()
     val userModelLiveData = MutableLiveData<UserDataModel>()
-//    val idParamLiveData = MutableLiveData<Int>()
+
+    //    val idParamLiveData = MutableLiveData<Int>()
     val numLiveData = MutableLiveData<Int>()
-    val isSuccessLoadingLiveData  = MutableLiveData<Boolean>()
+    val isSuccessLoadingLiveData = MutableLiveData<Boolean>()
     var job: Job? = null
+    var job2: Job? = null
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         Log.d("ERROR COROUTINE!", throwable.localizedMessage as String)
     }
 
-    fun getUser(id:Int) {
+    fun getUser(id: Int) {
 
         job = CoroutineScope(Dispatchers.IO).launch {
 
@@ -42,6 +48,20 @@ class SimpleViewModel constructor(private val userRepository: UserRepository) : 
         }
     }
 
+    fun getSimpleData(num: Int) {
+        job2 = CoroutineScope(Dispatchers.IO).launch {
+            val responce = simpleDataRepository.getSimpleDataById(num)
+
+            withContext(Dispatchers.Main + exceptionHandler) {
+                if (responce.isSuccessful) {
+                    dataModelLiveData.value = responce.body()
+                } else {
+                    Log.d("WWW", "SimpleData response is not success")
+                }
+            }
+        }
+    }
+
     fun showNum() {
         val _num = if (numLiveData.value != null) numLiveData.value else 0
 
@@ -51,5 +71,6 @@ class SimpleViewModel constructor(private val userRepository: UserRepository) : 
     override fun onCleared() {
         super.onCleared()
         job?.cancel()
+        job2?.cancel()
     }
 }
