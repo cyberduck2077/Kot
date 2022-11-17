@@ -8,6 +8,8 @@ import com.example.kot.model.user.UserDataModel
 import com.example.kot.repository.SimpleDataRepository
 import com.example.kot.repository.UserRepository
 import kotlinx.coroutines.*
+import kotlin.time.Duration.Companion.seconds
+
 
 class SimpleViewModel constructor(
     private val userRepository: UserRepository,
@@ -31,26 +33,33 @@ class SimpleViewModel constructor(
 
         job = CoroutineScope(Dispatchers.IO).launch {
 
-            val response = userRepository.getUserById(id)
+            Log.d("CURRENT THREAD 1", Thread.currentThread().name)
 
-            withContext(Dispatchers.Main + exceptionHandler) {
+            val response = userRepository.getUserById(id)
+            delay(duration = 3.seconds)
+
+            //если используется IO - используем liveData.postValue()
+            withContext(Dispatchers.IO + exceptionHandler) {
+                Log.d("CURRENT THREAD 2", Thread.currentThread().name)
                 if (response.isSuccessful) {
-                    userModelLiveData.value = response.body()
-                    isSuccessLoadingLiveData.value = true
+                    userModelLiveData.postValue(response.body())
+                    isSuccessLoadingLiveData.postValue(true)
 //                    Log.d("CODE", response.code().toString())
 //                    Log.d("BODY().TITLE", response.body()?.title.toString())
                 } else {
                     Log.d("WWW", "Response is not success")
-                    isSuccessLoadingLiveData.value = false
+                    isSuccessLoadingLiveData.postValue(false)
 
                 }
             }
         }
     }
 
+    //если используется MainThread - используем liveData.setValue()
     fun getSimpleData(num: Int) {
         job2 = CoroutineScope(Dispatchers.IO).launch {
             val responce = simpleDataRepository.getSimpleDataById(num)
+            delay(duration = 3.seconds)
 
             withContext(Dispatchers.Main + exceptionHandler) {
                 if (responce.isSuccessful) {

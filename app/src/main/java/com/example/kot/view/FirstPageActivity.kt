@@ -2,6 +2,8 @@ package com.example.kot.view
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.CountDownTimer
+import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
@@ -53,6 +55,9 @@ class FirstPageActivity : AppCompatActivity() {
 
         bind.editText.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
+
+
+
                 val s = bind.editText.text.toString()
                 val idUser = if (s.isNotEmpty() && s.toInt() > 0) s.toInt() else 0
 
