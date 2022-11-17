@@ -3,8 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/1serg/AndroidStudioProjects/Kot/app/src/main/res/drawable/ic_next_page.xml" value="0.175" />
         <entry key="..\:/Users/1serg/AndroidStudioProjects/Kot/app/src/main/res/layout/activity_first_page.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/1serg/AndroidStudioProjects/Kot/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/1serg/AndroidStudioProjects/Kot/app/src/main/res/layout/activity_second.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/1serg/AndroidStudioProjects/Kot/app/src/main/res/layout/card_for_user.xml" value="0.22010869565217392" />
       </map>
     </option>

@@ -16,6 +16,9 @@ interface RetrofitService {
     @GET("users/{id}")
     suspend fun getUserById(@Path("id") id: Int): Response<UserDataModel>
 
+    @GET("users/")
+    suspend fun getListUsers():Response<List<UserDataModel>>
+
     companion object {
         val baseUrl = "https://jsonplaceholder.typicode.com/"
         var retrofitService: RetrofitService? = null

@@ -1,9 +1,8 @@
 package com.example.kot.view
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.os.CountDownTimer
-import android.util.Log
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
 import android.widget.Toast
@@ -70,6 +69,10 @@ class FirstPageActivity : AppCompatActivity() {
             }
             false
         })
+
+        bind.nextPageButton.setOnClickListener{
+            startActivity(Intent(this, SecondActivity::class.java))
+        }
     }
 
     @SuppressLint("SetTextI18n")
